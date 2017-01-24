@@ -1,3 +1,6 @@
+import urllib2
+import json
+
 from socialbakers import urls
 from socialbakers import apiconfig
 from socialbakers import urlopener
@@ -14,11 +17,29 @@ class SocialNetworkObject(object):
 		pass
 
 	def get_profiles(self):
-		response = urllib2.open(self.url)
-		return response
+		profiles_url = '%s/profiles' % (self.url,)
+		response = urllib2.urlopen(profiles_url)
+		return response.read()
 
-	def get_metrics(self):
-		pass
+	def get_metrics(self,date_start, date_end, profiles, metrics):
+		metrics_url = '%s/metrics' % (self.url,)
+
+		headers = {}
+		headers['Content-Type'] = 'application/json; charset=utf-8'
+
+		parameters = {
+				"date_start": date_start,
+				"date_end": date_end,
+				"profiles": profiles,
+				"metrics": metrics
+				}
+
+		encoded_data = json.dumps(parameters)
+		request = urllib2.Request(metrics_url, data=encoded_data, headers=headers)
+
+		response = urllib2.urlopen(request)
+
+		return response.read()
 
 class FacebookObject(SocialNetworkObject):
 	def __init__(self):
@@ -177,3 +198,9 @@ class PinterestObject(SocialNetworkObject):
 # print(yt.socialnetwork)
 # print(pt.socialnetwork)
 
+# token = 'MjMzNzcyXzM5MzM0NV8xNzkyNDA4OTE5MjQ3XzUzYzUwNjU2YzQyN2MyOGUyOTY2MTdiNGU1YTc0Zjhh'
+# secret = '5aa58b075ebb8e92d5d8b72da1b1ccac'
+
+# urlopener.SocialBakersApi.init(token, secret)
+# print fb.get_profiles()
+# print fb.get_metrics('2017-01-01','2017-01-23',['332924283526819',],[FacebookObject.Metric.fans_change, FacebookObject.Metric.comments_count])

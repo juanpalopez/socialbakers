@@ -7,6 +7,7 @@ build
 *.egg-info/
 *.swp
 *.swo
+*.pyc
 config.json
 test_config.py
 arcanist/.phutil_module_cache

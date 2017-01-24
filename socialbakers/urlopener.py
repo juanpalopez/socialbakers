@@ -3,6 +3,8 @@ import urllib
 import json
 import base64
 
+from socialbakers import urls
+
 class PreemptiveBasicAuthHandler(urllib2.HTTPBasicAuthHandler):
     '''Preemptive basic auth.
 
@@ -25,15 +27,13 @@ class PreemptiveBasicAuthHandler(urllib2.HTTPBasicAuthHandler):
 
 
 class SocialBakersApi(object):
-
-    BASE_URL = 'https://api.socialbakers.com/'
     '''
         Manage Basic Authentication with PreemptiveBasicAuthHandler
         and installing a global opener for following calls
     '''
     @classmethod
     def init(cls, token, secret):
-        api_url = BASE_URL
+        api_url = urls.SocialBakersUrls.BASE_URL
         auth_handler = PreemptiveBasicAuthHandler()
         auth_handler.add_password(
             realm = None, # default realm.
