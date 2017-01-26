@@ -184,23 +184,3 @@ class PinterestObject(SocialNetworkObject):
 		pins_change = 'pins_change'
 		pins_count_lifetime = 'pins_count_lifetime'
 		repin_count = 'repin_count'
-
-
-# print(FacebookObject.Metric.comments_count)
-# fb = FacebookObject()
-# tw = TwitterObject()
-# ig = InstagramObject()
-# yt = YoutubeObject()
-# pt = PinterestObject()
-# print(fb.socialnetwork)
-# print(tw.socialnetwork)
-# print(ig.socialnetwork)
-# print(yt.socialnetwork)
-# print(pt.socialnetwork)
-
-# token = 'MjMzNzcyXzM5MzM0NV8xNzkyNDA4OTE5MjQ3XzUzYzUwNjU2YzQyN2MyOGUyOTY2MTdiNGU1YTc0Zjhh'
-# secret = '5aa58b075ebb8e92d5d8b72da1b1ccac'
-
-# urlopener.SocialBakersApi.init(token, secret)
-# print fb.get_profiles()
-# print fb.get_metrics('2017-01-01','2017-01-23',['332924283526819',],[FacebookObject.Metric.fans_change, FacebookObject.Metric.comments_count])

@@ -65,11 +65,4 @@ class FacebookPost(SocialbakersPostObject):
 		story = 'story'
 		status_type = 'type'
 		url = 'url'
-
-
-# fb = FacebookPost()
-# token = 'MjMzNzcyXzM5MzM0NV8xNzkyNDA4OTE5MjQ3XzUzYzUwNjU2YzQyN2MyOGUyOTY2MTdiNGU1YTc0Zjhh'
-# secret = '5aa58b075ebb8e92d5d8b72da1b1ccac'
-
-# urlopener.SocialBakersApi.init(token, secret)
-# print fb.get_fields('2017-01-01','2017-01-23','156078004438404',[FacebookPost.Field.attachments, FacebookPost.Field.author_id])
+		

@@ -8,6 +8,8 @@ build
 *.swp
 *.swo
 *.pyc
+*.pypirc
+*.cfg
 config.json
 test_config.py
 arcanist/.phutil_module_cache
