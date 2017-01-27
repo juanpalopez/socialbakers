@@ -26,7 +26,7 @@ class PreemptiveBasicAuthHandler(urllib2.HTTPBasicAuthHandler):
     https_request = http_request
 
 
-class SocialBakersApi(object):
+class SocialbakersApi(object):
     '''
         Manage Basic Authentication with PreemptiveBasicAuthHandler
         and installing a global opener for following calls

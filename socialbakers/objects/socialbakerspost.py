@@ -3,7 +3,6 @@ import json
 
 from socialbakers import urls
 from socialbakers import apiconfig
-from socialbakers import urlopener
 
 class SocialbakersPostObject(object):
 
