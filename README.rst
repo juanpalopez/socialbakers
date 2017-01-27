@@ -23,7 +23,7 @@ To use start using `socialbakers`API you will need to have a TOKEN and SECRET
 .. code-block:: bash
 	
 	from socialbakers import api
-	from socialbakers.objects import socialnetworkobject
+	from socialbakers.objects.socialnetworkobject import FacebookObject
 
 	token = '<YOUR-TOKEN>'
 	secret= '<YOUR-SECRET>'
