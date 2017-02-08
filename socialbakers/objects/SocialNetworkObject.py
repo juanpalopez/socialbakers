@@ -1,8 +1,12 @@
 import urllib2
 import json
+import itertools
 
 from socialbakers import urls
 from socialbakers import apiconfig
+from datetime import datetime
+from datetime import timedelta
+from time import sleep
 
 class SocialNetworkObject(object):
 
@@ -38,7 +42,138 @@ class SocialNetworkObject(object):
 
 		response = urllib2.urlopen(request)
 
-		return response.read()
+		return json.loads(response.read())
+
+	def get_metrics_split_fields(self,date_start, date_end, profiles, metrics):
+
+		num_metrics = len(metrics) 
+
+		if num_metrics < 26:
+			return self.get_metrics(date_start, date_end, profiles, metrics)
+		else:
+
+			data1 = self.get_metrics(date_start, date_end, profiles, metrics[:25])
+			data2 = self.get_metrics(date_start, date_end, profiles, metrics[25:])
+			# print(data1)
+			ids = [profile['id'] for  profile in data1['profiles'] ]
+			sub_data1 = [profile['data'] for  profile in data1['profiles']]
+			sub_data2 = [profile['data'] for  profile in data2['profiles']]
+
+			zipped_sub_data = zip(sub_data1,sub_data2)
+
+
+			metrics_data = []
+			for profile in zipped_sub_data:
+				expanded_data = []
+				for metrics1, metrics2 in itertools.izip(profile[0], profile[1]):
+					expanded_data.append(self.merge(metrics1, metrics2))
+				
+
+
+				metrics_data.append(expanded_data)
+
+
+			sb_data = []
+			for data, sb_id in itertools.izip(metrics_data, ids):
+				sb_data.append({'data': data, 'id': sb_id})
+				
+
+
+			result = {'success':True}
+			result['profiles'] = sb_data
+
+			return result
+				
+	def get_metrics_split_profiles(self,date_start, date_end, profiles, metrics):
+
+		floor = 0
+		ceiling = 25
+		profiles_data = []
+		num_profiles = len(profiles)
+
+		while ceiling < num_profiles:
+			# print("%s:%s" % (floor,ceiling))
+			
+			data = self.get_metrics_split_fields(date_start, date_end, profiles[floor:ceiling], metrics)
+			# print data
+			self.list_merge(profiles_data, data['profiles'])
+			# profiles_data.extend(data['profiles'][0]['data'])
+
+			floor += 25
+			ceiling += 25
+			sleep(2)
+
+
+		ceiling = num_profiles
+		# print("%s:%s" % (floor, ceiling) )
+
+		data = self.get_metrics_split_fields(date_start, date_end, profiles[floor:ceiling], metrics)
+		self.list_merge(profiles_data, data['profiles'])
+
+		result = {'success':True}
+		result['profiles'] = profiles_data
+		return result
+
+
+	def merge(self, dict_a, dict_b):
+		# list_a.extend(list_b)
+		# return list_a
+		dict_copy = dict_a.copy()
+		dict_copy.update(dict_b)
+		return dict_copy
+
+	def list_merge(self, list_a, list_b):
+		list_a.extend(list_b)
+		return list_a
+
+	def get_bulk_metrics(self,date_start, date_end, profiles, metrics):
+		tr = self.time_range(date_start,date_end)
+		profiles_data = []
+
+		# print(tr)
+		if tr <= 90:
+			return self.get_metrics_split_profiles(date_start, date_end, profiles, metrics)
+
+		else:
+			while self.time_range(date_start,date_end) > 90:
+				
+				data = self.get_metrics_split_profiles(date_start, self.add_time(date_start,90), profiles, metrics)
+				self.list_merge(profiles_data, data['profiles'])
+				print('.',)
+				# result.extend()
+				# data = self.get_metrics(date_start, self.add_time(date_start,90), profiles, metrics)
+				# result.extend(data['profiles'][0]['data'])
+
+				date_start = self.add_time(date_start,91)
+				print("looping")
+
+			print date_start
+			print date_end
+
+			data = self.get_metrics_split_profiles(date_start, date_end, profiles, metrics)
+			self.list_merge(profiles_data, data['profiles'])
+
+		# return result
+		result = {'success':True}
+		result['profiles'] = profiles_data
+		# print result_dict
+		return result
+
+
+	def time_range(self, date_start, date_end):
+		pattern = '%Y-%m-%d'
+		time_range = datetime.strptime(date_end, pattern) - datetime.strptime(date_start, pattern)
+		return time_range.days
+
+	def add_time(self,date_start, days):
+		pattern = '%Y-%m-%d'
+		new_date = datetime.strptime(date_start, pattern) + timedelta(days=days)
+		return datetime.strftime(new_date, pattern)
+
+
+def split_metrics_request(self,date_start, date_end, profiles, metrics):
+	pass
+
 
 class FacebookObject(SocialNetworkObject):
 	def __init__(self):
