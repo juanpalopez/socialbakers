@@ -318,3 +318,32 @@ class PinterestObject(SocialNetworkObject):
 		pins_change = 'pins_change'
 		pins_count_lifetime = 'pins_count_lifetime'
 		repin_count = 'repin_count'
+
+class SocialNetworkCatalog(object):
+
+	def __init__(self):
+		self.profiles_lists = []
+
+	def profile_list_splitter(self, profile_list):
+		return [profile_list[x:x+25] for x in xrange(0, len(profile_list), 25)]
+
+	def date_splitter(self, date_start, date_end):
+		dates = []
+		while SocialbakersUtils().time_range(date_start, date_end) > 90:
+			dates.append((date_start, SocialbakersUtils().add_time(date_start,90)) )
+			date_start = SocialbakersUtils().add_time(date_start,90)
+		dates.append((date_start,date_end))
+		return dates
+
+
+
+class SocialbakersUtils(object):
+	def time_range(cls, date_start, date_end):
+		pattern = '%Y-%m-%d'
+		time_range = datetime.strptime(date_end, pattern) - datetime.strptime(date_start, pattern)
+		return time_range.days
+
+	def add_time(cls,date_start, days):
+		pattern = '%Y-%m-%d'
+		new_date = datetime.strptime(date_start, pattern) + timedelta(days=days)
+		return datetime.strftime(new_date, pattern)
