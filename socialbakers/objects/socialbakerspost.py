@@ -1,4 +1,4 @@
-import urllib2
+import urllib
 import json
 
 from socialbakers import urls
@@ -13,9 +13,8 @@ class SocialbakersPostObject(object):
 		self.url = '%s/%s/%s' % (self.base_url, self.version, self.socialnetwork)
 
 	def get_fields(self, date_start, date_end, profile, fields):
-	'''
-    	Base object for each individual post for a given profile
-    '''
+		'''Base object for each individual post for a given profile
+		'''
 		fields_url = '%s/page/posts' % (self.url,)
 
 		headers = {}
@@ -29,10 +28,10 @@ class SocialbakersPostObject(object):
 				}
 
 		encoded_data = json.dumps(parameters)
-		print encoded_data
-		request = urllib2.Request(fields_url, data=encoded_data, headers=headers)
+		print(encoded_data)
+		request = urllib.request.Request(fields_url, data=encoded_data, headers=headers)
 
-		response = urllib2.urlopen(request)
+		response = urllib.request.urlopen(request)
 
 		return response.read()
 
@@ -41,8 +40,7 @@ class SocialbakersPostObject(object):
 			
 
 class FacebookPost(SocialbakersPostObject):
-	'''
-    	Each individual post in a Facebook profile
+	'''Each individual post in a Facebook profile
     '''
 
 	def __init__(self):

@@ -1,11 +1,10 @@
-import urllib2
 import urllib
 import json
 import base64
 
 from socialbakers import urls
 
-class PreemptiveBasicAuthHandler(urllib2.HTTPBasicAuthHandler):
+class PreemptiveBasicAuthHandler(urllib.request.HTTPBasicAuthHandler):
     '''Preemptive basic auth.
 
     Instead of waiting for a 403 to then retry with the credentials,
@@ -40,5 +39,5 @@ class SocialbakersApi(object):
             uri = api_url,
             user = token,
             passwd = secret)
-        opener = urllib2.build_opener(auth_handler)
-        urllib2.install_opener(opener)
+        opener = urllib.request.build_opener(auth_handler)
+        urllib.request.install_opener(opener)

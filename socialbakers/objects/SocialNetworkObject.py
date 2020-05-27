@@ -1,4 +1,4 @@
-import urllib2
+import urllib
 import json
 import itertools
 
@@ -21,7 +21,7 @@ class SocialNetworkObject(object):
 
 	def get_profiles(self):
 		profiles_url = '%s/profiles' % (self.url,)
-		response = urllib2.urlopen(profiles_url)
+		response = urllib.request.urlopen(profiles_url)
 		return response.read()
 
 	def get_metrics(self,date_start, date_end, profiles, metrics):
@@ -38,9 +38,9 @@ class SocialNetworkObject(object):
 				}
 
 		encoded_data = json.dumps(parameters)
-		request = urllib2.Request(metrics_url, data=encoded_data, headers=headers)
+		request = urllib.request.Request(metrics_url, data=encoded_data, headers=headers)
 
-		response = urllib2.urlopen(request)
+		response = urllib.request.urlopen(request)
 
 		return json.loads(response.read())
 
@@ -65,7 +65,7 @@ class SocialNetworkObject(object):
 			metrics_data = []
 			for profile in zipped_sub_data:
 				expanded_data = []
-				for metrics1, metrics2 in itertools.izip(profile[0], profile[1]):
+				for metrics1, metrics2 in zip(profile[0], profile[1]):
 					expanded_data.append(self.merge(metrics1, metrics2))
 				
 
@@ -74,7 +74,7 @@ class SocialNetworkObject(object):
 
 
 			sb_data = []
-			for data, sb_id in itertools.izip(metrics_data, ids):
+			for data, sb_id in zip(metrics_data, ids):
 				sb_data.append({'data': data, 'id': sb_id})
 				
 
@@ -147,8 +147,8 @@ class SocialNetworkObject(object):
 				date_start = self.add_time(date_start,91)
 				print("looping")
 
-			print date_start
-			print date_end
+			print(date_start)
+			print(date_end)
 
 			data = self.get_metrics_split_profiles(date_start, date_end, profiles, metrics)
 			self.list_merge(profiles_data, data['profiles'])
