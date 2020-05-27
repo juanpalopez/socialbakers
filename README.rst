@@ -8,7 +8,7 @@ This proyect is intended to ease the access to Socialbakers API.
 Installation
 ------------
 
-Socialbakers is supported on python 2.7. The recommended way to install is via `pip`
+Socialbakers is supported on python 3+ The recommended way to install is via `pip`
 
 .. code-block:: bash
 
